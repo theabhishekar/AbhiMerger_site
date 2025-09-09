@@ -1,0 +1,548 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AbhiMerger - Streamline Your PDF Workflow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    border: "var(--border)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+                }
+            },
+        }
+    };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --background: hsl(0 0% 100%);
+            --foreground: hsl(222 84% 5%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222 84% 5%);
+            --primary: hsl(221 83% 53%);
+            --primary-foreground: hsl(210 40% 98%);
+            --secondary: hsl(210 40% 96%);
+            --secondary-foreground: hsl(222 47% 11%);
+            --muted: hsl(210 40% 96%);
+            --muted-foreground: hsl(215 16% 47%);
+            --accent: hsl(142 76% 36%);
+            --accent-foreground: hsl(355 7% 97%);
+            --border: hsl(214 32% 91%);
+            --ring: hsl(221 83% 53%);
+            --radius: 8px;
+        }
+        
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+        
+        .backdrop-blur {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #1d4ed8 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .button-hover {
+            transition: all 0.2s ease;
+        }
+        
+        .button-hover:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .parallax {
+            transform: translateZ(0);
+            transition: transform 0.3s ease-out;
+        }
+        
+        .workflow-step {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        .workflow-step:nth-child(1) { animation-delay: 0.1s; }
+        .workflow-step:nth-child(2) { animation-delay: 0.2s; }
+        .workflow-step:nth-child(3) { animation-delay: 0.3s; }
+        .workflow-step:nth-child(4) { animation-delay: 0.4s; }
+        .workflow-step:nth-child(5) { animation-delay: 0.5s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feature-icon {
+            background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-background text-foreground smooth-scroll">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur border-b border-border">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-file-pdf text-2xl text-primary"></i>
+                    <span class="text-xl font-semibold">AbhiMerger</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-muted-foreground hover:text-foreground transition-colors">Features</a>
+                    <a href="#workflow" class="text-muted-foreground hover:text-foreground transition-colors">How it Works</a>
+                    <a href="#demo" class="text-muted-foreground hover:text-foreground transition-colors">Demo</a>
+                    <a href="#download" class="bg-primary text-primary-foreground px-4 py-2 rounded-lg button-hover font-medium">Download</a>
+                </div>
+                <button class="md:hidden">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient pt-24 pb-20">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <div class="parallax">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                    Streamline Your <span class="gradient-text">PDF Workflow</span>
+                </h1>
+                <p class="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+                    AbhiMerger automatically detects PDF references in your Excel files and merges them into a single document. 
+                    Cross-platform desktop app built for professionals who value efficiency.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#download" class="bg-primary text-primary-foreground px-8 py-4 rounded-xl button-hover font-semibold text-lg">
+                        <i class="fas fa-download mr-2"></i>
+                        Download Free
+                    </a>
+                    <a href="#demo" class="border border-border px-8 py-4 rounded-xl button-hover font-semibold text-lg bg-white">
+                        <i class="fas fa-play mr-2"></i>
+                        Watch Demo
+                    </a>
+                </div>
+            </div>
+            
+            <!-- App Preview -->
+            <div class="mt-16 parallax">
+                <!-- Modern macOS-style app window mockup showing Excel integration -->
+                <div class="bg-white rounded-2xl shadow-2xl max-w-4xl mx-auto overflow-hidden border border-border">
+                    <div class="bg-gray-100 px-4 py-3 flex items-center space-x-2 border-b border-border">
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <div class="ml-4 text-sm text-gray-600 font-medium">AbhiMerger</div>
+                    </div>
+                    <!-- App interface showing Excel table with PDF references -->
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=600" alt="AbhiMerger app interface showing Excel integration" class="w-full h-auto" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Powerful Features</h2>
+                <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
+                    Everything you need to manage PDFs from Excel with professional-grade tools
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature cards -->
+                <div class="bg-card p-8 rounded-2xl border border-border card-hover">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-table feature-icon text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Excel Integration</h3>
+                    <p class="text-muted-foreground">
+                        Automatically detects PDF references in Excel cells. Supports .xlsx and .xls formats with intelligent parsing.
+                    </p>
+                </div>
+                
+                <div class="bg-card p-8 rounded-2xl border border-border card-hover">
+                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-cloud feature-icon text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Multiple Sources</h3>
+                    <p class="text-muted-foreground">
+                        Local files, web URLs, Google Drive, Dropbox, and network paths. All your PDFs, wherever they are.
+                    </p>
+                </div>
+                
+                <div class="bg-card p-8 rounded-2xl border border-border card-hover">
+                    <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-search feature-icon text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Advanced Filtering</h3>
+                    <p class="text-muted-foreground">
+                        Interactive table with search and filtering capabilities. Find and select exactly what you need.
+                    </p>
+                </div>
+                
+                <div class="bg-card p-8 rounded-2xl border border-border card-hover">
+                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-file-pdf feature-icon text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">PDF Validation</h3>
+                    <p class="text-muted-foreground">
+                        Built-in PDF validation ensures all files are accessible and properly formatted before merging.
+                    </p>
+                </div>
+                
+                <div class="bg-card p-8 rounded-2xl border border-border card-hover">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-eye feature-icon text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Native PDF Viewer</h3>
+                    <p class="text-muted-foreground">
+                        Preview your merged results instantly with the built-in PDF viewer. No external apps needed.
+                    </p>
+                </div>
+                
+                <div class="bg-card p-8 rounded-2xl border border-border card-hover">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-desktop feature-icon text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Cross Platform</h3>
+                    <p class="text-muted-foreground">
+                        Native desktop app for Windows, macOS, and Linux. Same great experience on every platform.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="py-20 bg-secondary">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">5-Step Workflow</h2>
+                <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
+                    Simple, intuitive process that gets you from Excel to merged PDF in minutes
+                </p>
+            </div>
+            
+            <div class="space-y-12">
+                <!-- Step 1 -->
+                <div class="workflow-step flex flex-col lg:flex-row items-center gap-12">
+                    <div class="lg:w-1/2">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-primary-foreground font-bold text-xl mr-4">1</div>
+                            <h3 class="text-2xl font-semibold">Upload Excel File</h3>
+                        </div>
+                        <p class="text-lg text-muted-foreground leading-relaxed">
+                            Simply drag and drop your Excel file (.xlsx or .xls) into AbhiMerger. 
+                            The app instantly analyzes your spreadsheet and identifies potential PDF references.
+                        </p>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <!-- File upload interface mockup -->
+                        <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" alt="Excel file upload interface" class="rounded-2xl shadow-lg w-full" />
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="workflow-step flex flex-col lg:flex-row-reverse items-center gap-12">
+                    <div class="lg:w-1/2">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-primary-foreground font-bold text-xl mr-4">2</div>
+                            <h3 class="text-2xl font-semibold">Browse Interactive Table</h3>
+                        </div>
+                        <p class="text-lg text-muted-foreground leading-relaxed">
+                            View your Excel data in a clean, searchable table. 
+                            Use powerful filtering and search capabilities to quickly locate the PDF references you need.
+                        </p>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <!-- Interactive table mockup -->
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" alt="Interactive data table interface" class="rounded-2xl shadow-lg w-full" />
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="workflow-step flex flex-col lg:flex-row items-center gap-12">
+                    <div class="lg:w-1/2">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-primary-foreground font-bold text-xl mr-4">3</div>
+                            <h3 class="text-2xl font-semibold">Select PDF Paths</h3>
+                        </div>
+                        <p class="text-lg text-muted-foreground leading-relaxed">
+                            Click on cells containing PDF paths to select them. 
+                            Bulk selection via checkboxes for rows and columns makes it easy to handle large datasets.
+                        </p>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <!-- PDF selection interface mockup -->
+                        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" alt="PDF path selection interface" class="rounded-2xl shadow-lg w-full" />
+                    </div>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="workflow-step flex flex-col lg:flex-row-reverse items-center gap-12">
+                    <div class="lg:w-1/2">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-primary-foreground font-bold text-xl mr-4">4</div>
+                            <h3 class="text-2xl font-semibold">Validate & Merge</h3>
+                        </div>
+                        <p class="text-lg text-muted-foreground leading-relaxed">
+                            AbhiMerger validates all PDF paths and begins the merge process. 
+                            Real-time progress tracking keeps you informed every step of the way.
+                        </p>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <!-- Progress tracking mockup -->
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" alt="Merge progress tracking interface" class="rounded-2xl shadow-lg w-full" />
+                    </div>
+                </div>
+                
+                <!-- Step 5 -->
+                <div class="workflow-step flex flex-col lg:flex-row items-center gap-12">
+                    <div class="lg:w-1/2">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-primary-foreground font-bold text-xl mr-4">5</div>
+                            <h3 class="text-2xl font-semibold">Preview & Save</h3>
+                        </div>
+                        <p class="text-lg text-muted-foreground leading-relaxed">
+                            Preview your merged PDF with the built-in viewer, then save it to your desired location. 
+                            Professional results every time with comprehensive error handling.
+                        </p>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <!-- PDF preview mockup -->
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" alt="PDF preview and save interface" class="rounded-2xl shadow-lg w-full" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-4">See It In Action</h2>
+            <p class="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
+                Watch how AbhiMerger transforms your Excel-to-PDF workflow in just a few clicks
+            </p>
+            
+            <!-- Video placeholder -->
+            <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl max-w-4xl mx-auto">
+                <div class="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 cursor-pointer button-hover">
+                            <i class="fas fa-play text-2xl text-gray-900"></i>
+                        </div>
+                        <p class="text-white text-lg">Watch Demo Video</p>
+                        <p class="text-gray-400 text-sm mt-2">2 minutes • HD Quality</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="grid md:grid-cols-3 gap-8 mt-16">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">95%</div>
+                    <p class="text-muted-foreground">Time Saved</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">1000+</div>
+                    <p class="text-muted-foreground">PDFs Per Batch</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">0</div>
+                    <p class="text-muted-foreground">Setup Required</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="py-20 bg-secondary">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-4">Download AbhiMerger</h2>
+            <p class="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
+                Free desktop application for Windows, macOS, and Linux. Start streamlining your PDF workflow today.
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
+                <!-- Windows -->
+                <div class="bg-white p-8 rounded-2xl border border-border card-hover">
+                    <i class="fab fa-windows text-4xl text-blue-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Windows</h3>
+                    <p class="text-muted-foreground mb-6">Windows 10/11 (64-bit)</p>
+                    <button class="w-full bg-primary text-primary-foreground py-3 rounded-xl button-hover font-semibold">
+                        <i class="fas fa-download mr-2"></i>
+                        Download for Windows
+                    </button>
+                    <p class="text-sm text-muted-foreground mt-2">Version 1.0.0 • 125 MB</p>
+                </div>
+                
+                <!-- macOS -->
+                <div class="bg-white p-8 rounded-2xl border border-border card-hover">
+                    <i class="fab fa-apple text-4xl text-gray-800 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">macOS</h3>
+                    <p class="text-muted-foreground mb-6">macOS 11+ (Intel & Apple Silicon)</p>
+                    <button class="w-full bg-primary text-primary-foreground py-3 rounded-xl button-hover font-semibold">
+                        <i class="fas fa-download mr-2"></i>
+                        Download for Mac
+                    </button>
+                    <p class="text-sm text-muted-foreground mt-2">Version 1.0.0 • 98 MB</p>
+                </div>
+                
+                <!-- Linux -->
+                <div class="bg-white p-8 rounded-2xl border border-border card-hover">
+                    <i class="fab fa-linux text-4xl text-orange-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Linux</h3>
+                    <p class="text-muted-foreground mb-6">Ubuntu 18.04+ / AppImage</p>
+                    <button class="w-full bg-primary text-primary-foreground py-3 rounded-xl button-hover font-semibold">
+                        <i class="fas fa-download mr-2"></i>
+                        Download for Linux
+                    </button>
+                    <p class="text-sm text-muted-foreground mt-2">Version 1.0.0 • 142 MB</p>
+                </div>
+            </div>
+            
+            <!-- Additional info -->
+            <div class="bg-white p-8 rounded-2xl border border-border max-w-2xl mx-auto">
+                <h3 class="text-lg font-semibold mb-4">System Requirements</h3>
+                <div class="grid md:grid-cols-2 gap-6 text-left">
+                    <div>
+                        <h4 class="font-medium mb-2">Minimum Requirements</h4>
+                        <ul class="text-sm text-muted-foreground space-y-1">
+                            <li>• 4GB RAM</li>
+                            <li>• 200MB free storage</li>
+                            <li>• Internet connection (for cloud PDFs)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-2">Supported Formats</h4>
+                        <ul class="text-sm text-muted-foreground space-y-1">
+                            <li>• Excel: .xlsx, .xls</li>
+                            <li>• PDF: All standard formats</li>
+                            <li>• Cloud: Google Drive, Dropbox</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-border py-12">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                    <i class="fas fa-file-pdf text-2xl text-primary"></i>
+                    <span class="text-xl font-semibold">AbhiMerger</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="#" class="text-muted-foreground hover:text-foreground">Privacy</a>
+                    <a href="#" class="text-muted-foreground hover:text-foreground">Terms</a>
+                    <a href="#" class="text-muted-foreground hover:text-foreground">Support</a>
+                    <a href="#" class="text-muted-foreground hover:text-foreground">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
+                <p>&copy; 2024 AbhiMerger. Built with Electron, React, and Node.js.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        (function() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Parallax effect for hero section
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const parallaxElements = document.querySelectorAll('.parallax');
+                
+                parallaxElements.forEach(element => {
+                    const speed = 0.5;
+                    element.style.transform = `translateY(${scrolled * speed}px)`;
+                });
+            });
+
+            // TODO: Implement download functionality
+            // TODO: Add real video player for demo section
+            // TODO: Connect to actual app distribution system
+        })();
+    </script>
+</body>
+</html>

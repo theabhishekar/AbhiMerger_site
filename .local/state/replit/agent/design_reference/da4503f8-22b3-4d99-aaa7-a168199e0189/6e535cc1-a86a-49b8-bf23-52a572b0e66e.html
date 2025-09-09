@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AbhiMerger - Streamline Your PDF Workflow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["var(--font-sans)"],
+                },
+                animation: {
+                    'fade-in': 'fadeIn 0.6s ease-out',
+                    'slide-up': 'slideUp 0.8s ease-out',
+                    'float': 'float 3s ease-in-out infinite',
+                }
+            },
+        }
+    };
+    </script>
+    <style>
+        :root {
+            --radius: 12px;
+            --background: hsl(0 0% 100%);
+            --foreground: hsl(224 12% 9%);
+            --card: hsl(0 0% 98%);
+            --card-foreground: hsl(224 12% 9%);
+            --primary: hsl(211 100% 50%);
+            --primary-foreground: hsl(0 0% 98%);
+            --secondary: hsl(210 11% 96%);
+            --secondary-foreground: hsl(224 12% 9%);
+            --muted: hsl(210 11% 96%);
+            --muted-foreground: hsl(215 16% 47%);
+            --accent: hsl(211 86% 70%);
+            --accent-foreground: hsl(224 12% 9%);
+            --border: hsl(214 32% 91%);
+            --input: hsl(214 32% 91%);
+            --ring: hsl(211 100% 50%);
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            color: var(--foreground);
+            background: var(--background);
+            scroll-behavior: smooth;
+        }
+
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease-out;
+        }
+
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .workflow-step {
+            transition: all 0.3s ease;
+        }
+
+        .workflow-step:hover {
+            transform: scale(1.05);
+        }
+
+        .app-mockup {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glassmorphism">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <span class="text-primary-foreground font-bold">A</span>
+                    </div>
+                    <span class="text-xl font-semibold">AbhiMerger</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#features" class="text-muted-foreground hover:text-foreground transition-colors">Features</a>
+                    <a href="#workflow" class="text-muted-foreground hover:text-foreground transition-colors">How it Works</a>
+                    <a href="#download" class="text-muted-foreground hover:text-foreground transition-colors">Download</a>
+                </div>
+                <button class="bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-blue-600 transition-all transform hover:scale-105">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient min-h-screen flex items-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute top-20 left-10 w-64 h-64 bg-primary rounded-full animate-float"></div>
+            <div class="absolute bottom-20 right-10 w-32 h-32 bg-accent rounded-full animate-float" style="animation-delay: -1.5s;"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8 animate-fade-in">
+                <h1 class="text-5xl lg:text-6xl font-bold leading-tight">
+                    Streamline Your
+                    <span class="text-primary">PDF Workflow</span>
+                </h1>
+                <p class="text-xl text-muted-foreground leading-relaxed">
+                    AbhiMerger automatically detects PDF references in Excel spreadsheets and merges them into a single document. Cross-platform, intuitive, and powerful.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button class="bg-primary text-primary-foreground px-8 py-4 rounded-full text-lg font-medium hover:bg-blue-600 transition-all transform hover:scale-105 shadow-lg">
+                        Download for Mac
+                    </button>
+                    <button class="border border-border px-8 py-4 rounded-full text-lg font-medium hover:bg-secondary transition-all transform hover:scale-105">
+                        View Demo
+                    </button>
+                </div>
+                <div class="flex items-center space-x-6 text-sm text-muted-foreground">
+                    <span>✓ Windows</span>
+                    <span>✓ macOS</span>
+                    <span>✓ Linux</span>
+                </div>
+            </div>
+            
+            <div class="relative animate-slide-up">
+                <!-- App mockup showing Excel interface with PDF merging -->
+                <div class="app-mockup bg-card p-6">
+                    <!-- App header -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                            <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                            <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                        </div>
+                        <div class="text-sm text-muted-foreground">AbhiMerger.xlsx - Excel</div>
+                    </div>
+                    
+                    <!-- Mock Excel interface -->
+                    <div class="bg-white rounded-lg border border-border overflow-hidden">
+                        <div class="bg-secondary px-4 py-2 border-b border-border">
+                            <div class="flex space-x-8 text-sm">
+                                <span class="font-medium">File</span>
+                                <span>Edit</span>
+                                <span>View</span>
+                                <span class="text-primary font-medium">AbhiMerger</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Mock spreadsheet data -->
+                        <div class="p-4">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-border">
+                                        <th class="text-left py-2 px-3 bg-muted">Document</th>
+                                        <th class="text-left py-2 px-3 bg-muted">PDF Path</th>
+                                        <th class="text-left py-2 px-3 bg-muted">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-border">
+                                        <td class="py-2 px-3">Invoice_001</td>
+                                        <td class="py-2 px-3 text-primary">C:/Documents/invoice_001.pdf</td>
+                                        <td class="py-2 px-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">✓ Ready</span></td>
+                                    </tr>
+                                    <tr class="border-b border-border">
+                                        <td class="py-2 px-3">Report_Q1</td>
+                                        <td class="py-2 px-3 text-primary">https://drive.google.com/file/d/abc123</td>
+                                        <td class="py-2 px-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">✓ Ready</span></td>
+                                    </tr>
+                                    <tr class="border-b border-border">
+                                        <td class="py-2 px-3">Contract_v2</td>
+                                        <td class="py-2 px-3 text-primary">\\network\share\contract_v2.pdf</td>
+                                        <td class="py-2 px-3"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">⟳ Processing</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="mt-4 flex justify-center">
+                                <button class="bg-primary text-primary-foreground px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                                    Merge Selected PDFs
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="text-4xl font-bold mb-4">Powerful Features</h2>
+                <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
+                    Built for professionals who need to consolidate PDF documents efficiently and reliably
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="feature-card glassmorphism p-8 rounded-2xl scroll-reveal">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Smart PDF Detection</h3>
+                    <p class="text-muted-foreground">Automatically identifies PDF file paths in Excel cells, supporting local files, URLs, and cloud storage links.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-card glassmorphism p-8 rounded-2xl scroll-reveal" style="animation-delay: 0.1s;">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Interactive Data Table</h3>
+                    <p class="text-muted-foreground">Browse your Excel data with powerful search and filtering capabilities. Click cells to select PDF sources.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card glassmorphism p-8 rounded-2xl scroll-reveal" style="animation-delay: 0.2s;">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Lightning Fast Merging</h3>
+                    <p class="text-muted-foreground">Merge multiple PDFs in seconds with real-time progress tracking and comprehensive error handling.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="feature-card glassmorphism p-8 rounded-2xl scroll-reveal" style="animation-delay: 0.3s;">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Built-in Validation</h3>
+                    <p class="text-muted-foreground">Validates PDF files before merging to ensure integrity and prevent errors in your final document.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="feature-card glassmorphism p-8 rounded-2xl scroll-reveal" style="animation-delay: 0.4s;">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Native PDF Viewer</h3>
+                    <p class="text-muted-foreground">Preview your merged PDF documents directly within the app before saving or sharing.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="feature-card glassmorphism p-8 rounded-2xl scroll-reveal" style="animation-delay: 0.5s;">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Cross-Platform</h3>
+                    <p class="text-muted-foreground">Works seamlessly across Windows, macOS, and Linux with native performance and familiar UI patterns.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="py-24 bg-muted/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="text-4xl font-bold mb-4">Simple 5-Step Workflow</h2>
+                <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
+                    From Excel upload to PDF merger in just five intuitive steps
+                </p>
+            </div>
+
+            <div class="relative">
+                <!-- Workflow Steps -->
+                <div class="grid md:grid-cols-5 gap-8">
+                    <!-- Step 1 -->
+                    <div class="workflow-step text-center scroll-reveal">
+                        <div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <span class="text-2xl font-bold text-primary-foreground">1</span>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Upload Excel</h3>
+                        <p class="text-sm text-muted-foreground">Import your .xlsx or .xls files containing PDF references</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="workflow-step text-center scroll-reveal" style="animation-delay: 0.1s;">
+                        <div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <span class="text-2xl font-bold text-primary-foreground">2</span>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Browse Data</h3>
+                        <p class="text-sm text-muted-foreground">Explore your data with interactive table, search, and filters</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="workflow-step text-center scroll-reveal" style="animation-delay: 0.2s;">
+                        <div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <span class="text-2xl font-bold text-primary-foreground">3</span>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Select PDFs</h3>
+                        <p class="text-sm text-muted-foreground">Click cells to select PDF paths or use bulk selection</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="workflow-step text-center scroll-reveal" style="animation-delay: 0.3s;">
+                        <div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <span class="text-2xl font-bold text-primary-foreground">4</span>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Merge Files</h3>
+                        <p class="text-sm text-muted-foreground">Watch real-time progress as PDFs are validated and merged</p>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="workflow-step text-center scroll-reveal" style="animation-delay: 0.4s;">
+                        <div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <span class="text-2xl font-bold text-primary-foreground">5</span>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Preview & Save</h3>
+                        <p class="text-sm text-muted-foreground">Review the merged PDF and save to your preferred location</p>
+                    </div>
+                </div>
+
+                <!-- Connecting Lines -->
+                <div class="hidden md:block absolute top-8 left-0 right-0 h-0.5 bg-border"></div>
+            </div>
+
+            <!-- Interactive Demo -->
+            <div class="mt-16 text-center scroll-reveal">
+                <button class="bg-primary text-primary-foreground px-8 py-4 rounded-full text-lg font-medium hover:bg-blue-600 transition-all transform hover:scale-105 shadow-lg">
+                    Try Interactive Demo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="py-24 bg-background">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="scroll-reveal">
+                <h2 class="text-4xl font-bold mb-6">Download AbhiMerger</h2>
+                <p class="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
+                    Get started with the most efficient PDF merging solution for Excel users. Available for all major platforms.
+                </p>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <!-- Windows -->
+                    <div class="glassmorphism p-8 rounded-2xl hover:shadow-lg transition-all">
+                        <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.351"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Windows</h3>
+                        <p class="text-sm text-muted-foreground mb-4">Windows 10/11 (64-bit)</p>
+                        <button class="w-full bg-primary text-primary-foreground py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                            Download for Windows
+                        </button>
+                    </div>
+
+                    <!-- macOS -->
+                    <div class="glassmorphism p-8 rounded-2xl hover:shadow-lg transition-all border-2 border-primary">
+                        <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">macOS</h3>
+                        <p class="text-sm text-muted-foreground mb-4">macOS 10.15+ (Intel & Apple Silicon)</p>
+                        <button class="w-full bg-primary text-primary-foreground py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                            Download for Mac
+                        </button>
+                        <div class="mt-2 text-xs text-primary">Recommended</div>
+                    </div>
+
+                    <!-- Linux -->
+                    <div class="glassmorphism p-8 rounded-2xl hover:shadow-lg transition-all">
+                        <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.504 0c-.155 0-.315.008-.480.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 01-.088.095c-.16.155-.331.293-.500.435-.18.145-.354.295-.6.652-.18.26-.476.433-.796.451-.322.016-.668-.201-.813-.496-.138-.291-.053-.6-.061-.94-.01-.366-.045-.734-.087-1.068-.043-.33-.093-.663-.036-.975.057-.318.181-.579.337-.812.156-.236.375-.392.648-.456l.208-.026c.207-.031.414-.031.621-.031l.003-.003z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Linux</h3>
+                        <p class="text-sm text-muted-foreground mb-4">Ubuntu 18.04+ / Fedora 32+</p>
+                        <button class="w-full bg-primary text-primary-foreground py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                            Download for Linux
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-sm text-muted-foreground mb-8">
+                    System Requirements: 4GB RAM • 500MB Storage • .NET 6.0 Runtime
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors">
+                        View Release Notes
+                    </button>
+                    <button class="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors">
+                        Documentation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-foreground text-background py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                            <span class="text-primary-foreground font-bold">A</span>
+                        </div>
+                        <span class="text-xl font-semibold">AbhiMerger</span>
+                    </div>
+                    <p class="text-sm opacity-70">
+                        Streamlining PDF workflows for Excel users worldwide with cross-platform desktop applications.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm opacity-70">
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Features</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Pricing</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Changelog</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Roadmap</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-sm opacity-70">
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Documentation</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Help Center</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Contact Us</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Community</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm opacity-70">
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">About</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Blog</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Privacy</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm opacity-70">© 2024 AbhiMerger. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="opacity-70 hover:opacity-100 transition-opacity">
+                        <span class="sr-only">Twitter</span>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="opacity-70 hover:opacity-100 transition-opacity">
+                        <span class="sr-only">GitHub</span>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll reveal animation
+        (function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all scroll-reveal elements
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Platform detection for download buttons
+            function detectPlatform() {
+                const platform = navigator.platform.toLowerCase();
+                const userAgent = navigator.userAgent.toLowerCase();
+                
+                if (platform.includes('mac') || userAgent.includes('mac')) {
+                    return 'mac';
+                } else if (platform.includes('win') || userAgent.includes('windows')) {
+                    return 'windows';
+                } else if (platform.includes('linux') || userAgent.includes('linux')) {
+                    return 'linux';
+                }
+                return 'windows'; // default
+            }
+
+            // Update download buttons based on platform
+            const platform = detectPlatform();
+            const primaryDownloadBtn = document.querySelector('.bg-primary.text-primary-foreground');
+            if (primaryDownloadBtn && primaryDownloadBtn.textContent.includes('Download for')) {
+                switch(platform) {
+                    case 'mac':
+                        primaryDownloadBtn.textContent = 'Download for Mac';
+                        break;
+                    case 'linux':
+                        primaryDownloadBtn.textContent = 'Download for Linux';
+                        break;
+                    default:
+                        primaryDownloadBtn.textContent = 'Download for Windows';
+                }
+            }
+        })();
+    </script>
+</body>
+</html>

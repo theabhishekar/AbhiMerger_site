@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import { usePlatformDetection, getPlatformDisplayName } from "@/hooks/use-platform-detection";
+import { useState } from "react";
 
 export function HeroSection() {
   const platform = usePlatformDetection();
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -64,15 +67,31 @@ export function HeroSection() {
             >
               Download for {getPlatformDisplayName(platform)}
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => scrollToSection("workflow")}
-              className="border-border px-8 py-4 rounded-full text-lg font-medium hover:bg-secondary transition-all transform hover:scale-105"
-              size="lg"
-              data-testid="button-view-demo"
-            >
-              View Demo
-            </Button>
+            <Dialog open={isVideoOpen} onOpenChange={setIsVideoOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="border-border px-8 py-4 rounded-full text-lg font-medium hover:bg-secondary transition-all transform hover:scale-105"
+                  size="lg"
+                  data-testid="button-view-demo"
+                >
+                  View Demo
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl w-full p-0">
+                <div className="relative aspect-video">
+                  <video
+                    src="/videos/DemoVedio.mov"
+                    controls
+                    autoPlay
+                    className="w-full h-full rounded-lg"
+                    onEnded={() => setIsVideoOpen(false)}
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
           <div className="flex items-center space-x-6 text-sm text-muted-foreground">
             <span data-testid="platform-windows">✓ Windows</span>

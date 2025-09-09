@@ -81,7 +81,7 @@ export function HeroSection() {
               <DialogContent className="max-w-4xl w-full p-0">
                 <div className="relative aspect-video">
                   <video
-                    src="/videos/DemoVedio.mov"
+                    src="/DemoVedio.mov"
                     controls
                     autoPlay
                     className="w-full h-full rounded-lg"

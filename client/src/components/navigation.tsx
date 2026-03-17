@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { DOCS_URL } from "@/lib/constants";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -62,6 +63,15 @@ export function Navigation() {
             >
               Download
             </button>
+            <a
+              href={DOCS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              data-testid="nav-documentation"
+            >
+              Documentation
+            </a>
           </div>
           
           <Button

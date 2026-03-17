@@ -2,6 +2,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { Button } from "@/components/ui/button";
 import { usePlatformDetection, getPlatformDisplayName } from "@/hooks/use-platform-detection";
+import { DOCS_URL } from "@/lib/constants";
 
 const platforms = [
   {
@@ -120,13 +121,19 @@ export function DownloadSection() {
               >
                 View Release Notes
               </Button>
-              <Button
-                variant="outline"
-                className="px-6 py-3 border-border rounded-lg hover:bg-secondary transition-colors"
+              <a
+                href={DOCS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 data-testid="button-documentation"
               >
-                Documentation
-              </Button>
+                <Button
+                  variant="outline"
+                  className="px-6 py-3 border-border rounded-lg hover:bg-secondary transition-colors"
+                >
+                  Documentation
+                </Button>
+              </a>
             </div>
           </div>
         </ScrollReveal>

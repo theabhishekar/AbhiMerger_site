@@ -1,1 +1,1 @@
-export const DOCS_URL = "https://github.com/theabhishekar/AbhiMerger_site#readme";
+export const DOCS_URL = "https://abhishekar.gitbook.io/abhimerger/";
